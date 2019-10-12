@@ -59,7 +59,6 @@ function login(body, callback) {
             console.log(err);
             callback(err);
         }    
-        callback(err);
     })
 }
 function signUp(body, callback){
