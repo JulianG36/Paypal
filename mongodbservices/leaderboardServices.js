@@ -1,7 +1,7 @@
-const {user} = require("../models/user");
+const {HackathonUser} = require("../models/user");
 
 function getUsers(_id, callback){
-    user.find(_id, (err, data) =>{
+    HackathonUser.find(_id, (err, data) =>{
         if(err){
             console.log(err);
             callback(err);
@@ -14,7 +14,7 @@ function getUsers(_id, callback){
 
 
 function getFirstName(_id, callback){
-    user.find(_id, (err, data) =>{
+    HackathonUser.find(_id, (err, data) =>{
         const{firstname, lastname} = data;
         const foo = {
             firstname, 
@@ -31,7 +31,7 @@ function getFirstName(_id, callback){
 }
 
 function getFirstName(_id, callback){
-    user.find(_id, (err, data) =>{
+    HackathonUser.find(_id, (err, data) =>{
         const{finance} = data;
         const foo = {
             finance,
@@ -47,8 +47,12 @@ function getFirstName(_id, callback){
 }
 
 
-function login(email, password, callback) {
-   user.findOne({email},(err, user) => {
+function login(body, callback) {
+    const {email, password} = body;
+   HackathonUser.findOne({"email": email},(err, user) => {
+       if(!user){
+            callback("User does not exist");
+       }
         if (password === user.password) {
             callback(err, user._id);
         } else {
@@ -60,20 +64,21 @@ function login(email, password, callback) {
 }
 function signUp(body, callback){
     const {email} = body;
-    user.findOne({email},(err, user) => {
+    
+    HackathonUser.findOne({email},(err, user) => {
         if(user){
-            return "User Already Exists";
+            callback("User Already exists");
         }else{
-            const newUser = new user();
+            const newUser = new HackathonUser();
             newUser.firstname = body.firstname;
             newUser.lastname = body.lastname;
             newUser.email = body.email;
             newUser.password = body.password;
             newUser.save(function(err){
                 if(err){
-                    console.log(err);
+                    callback(err);
                 }else{
-                    console.log("saved");
+                    callback(false);
                 }
             })
         }
@@ -81,5 +86,6 @@ function signUp(body, callback){
 }
 
 
+module.exports.login = login;
 module.exports.signUp = signUp;
 module.exports.getUsers = getUsers;

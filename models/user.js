@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const {friends} = require("../models/friends");
 const {finance} = require("../models/finance");
+const model = mongoose.model;
 
-const user = mongoose.Schema({
+const HackathonUser = mongoose.Schema({
     firstname: String,
     lastname: String,
     password: String,
@@ -12,4 +13,4 @@ const user = mongoose.Schema({
 
 })
 
-module.exports.user = user;
+module.exports.HackathonUser = model("HackathonUser",HackathonUser);;
