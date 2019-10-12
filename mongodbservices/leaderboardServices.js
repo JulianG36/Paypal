@@ -69,6 +69,7 @@ function signUp(body, callback){
         if(user){
             callback("User Already exists");
         }else{
+            console.log(body);
             const newUser = new HackathonUser();
             newUser.firstname = body.firstname;
             newUser.lastname = body.lastname;
